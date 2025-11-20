@@ -40,7 +40,7 @@ Diff:
             },
             {"role": "user", "content": prompt},
         ],
-        max_tokens=200,
+        max_tokens=2000,
         temperature=0.4,
     )
 
