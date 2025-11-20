@@ -137,10 +137,17 @@ def main() -> int:
 
     try:
         questions_text = ask_ai_for_review_questions(diff)
+        print("🤖 AI Response received!")
+        print(f"📝 Response length: {len(questions_text)} characters")
     except Exception as e:
-        print(f"AI request failed: {e}")
-        # You may choose to block commit on failure; for now, allow commit.
-        return 0
+        print(f"❌ AI request failed: {e}")
+        # Provide fallback questions
+        print("📝 Using fallback questions...")
+        questions_text = """1. What is the main purpose of this change?
+2. How does this change improve the codebase?
+3. Are there any potential risks or side effects?
+4. How will you test this change?
+5. Does this change require documentation updates?"""
 
     print("=========== AI Review Questions ===========")
     print(questions_text)
@@ -148,9 +155,17 @@ def main() -> int:
 
     # Parse and collect answers
     questions = parse_questions(questions_text)
+    print(f"📊 Parsed {len(questions)} questions from AI response")
+    
     if not questions:
-        print("\nNo questions parsed. Continuing commit.")
-        return 0
+        print("⚠️ No questions could be parsed. Using fallback questions...")
+        questions = [
+            "What is the main purpose of this change?",
+            "How does this change improve the codebase?", 
+            "Are there any potential risks or side effects?",
+            "How will you test this change?",
+            "Does this change require documentation updates?"
+        ]
     
     answers = collect_answers(questions)
     append_to_commit_message(answers)
