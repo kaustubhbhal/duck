@@ -1,0 +1,6 @@
+- id: generate-why-questions
+  name: Generate Why Questions
+  entry: duck
+  language: python
+  pass_filenames: false
+  always_run: true
