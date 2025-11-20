@@ -64,16 +64,32 @@ def parse_questions(questions_text: str) -> list[str]:
 def collect_answers(questions: list[str]) -> dict[str, str]:
     """Prompt the user to answer each question."""
     answers = {}
-    print("\n📝 Please answer the following questions:\n")
+    print("\n" + "="*60, flush=True)
+    print("📝 PLEASE ANSWER THE FOLLOWING QUESTIONS", flush=True)
+    print("="*60 + "\n", flush=True)
+    print("(Type your answer and press Enter. Press Ctrl+C to skip)\n", flush=True)
     
     # Open /dev/tty to read from the terminal even in a hook
     try:
         with open('/dev/tty', 'r') as tty:
             for i, question in enumerate(questions, 1):
-                print(f"\nQ{i}: {question}")
+                print(f"\n[Question {i}/{len(questions)}]", flush=True)
+                print(f"Q: {question}", flush=True)
                 print("A: ", end='', flush=True)
+                sys.stdout.flush()  # Extra flush
                 answer = tty.readline().strip()
-                answers[question] = answer
+                if answer:
+                    answers[question] = answer
+                else:
+                    answers[question] = "(no answer provided)"
+        
+        print("\n" + "="*60, flush=True)
+        print(f"✅ Collected {len(answers)} answers!", flush=True)
+        print("="*60 + "\n", flush=True)
+                    
+    except KeyboardInterrupt:
+        print("\n\n⚠️  Q&A cancelled by user. Continuing without answers.")
+        return {}
     except Exception as e:
         print(f"Error reading input: {e}")
         print("Skipping Q&A collection.")
