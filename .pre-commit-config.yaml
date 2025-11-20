@@ -3,6 +3,6 @@ repos:
     rev: v1.0.0-alpha
     hooks:
       - id: generate-why-questions
-        name: Generate Why Questions
-        language: python
-        entry: duck
+        stages: [commit]
+      - id: append-why-answers
+        stages: [prepare-commit-msg]

@@ -4,3 +4,12 @@
   language: python
   pass_filenames: false
   always_run: true
+  stages: [commit]
+
+- id: append-why-answers
+  name: Append Why Answers to Commit Message
+  entry: duck-prepare-commit-msg
+  language: python
+  pass_filenames: false
+  always_run: true
+  stages: [prepare-commit-msg]

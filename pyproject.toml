@@ -27,3 +27,4 @@ Homepage = "https://github.com/kaustubhbhal/duck"
 
 [project.scripts]
 duck = "duck.cli:main"
+duck-prepare-commit-msg = "duck.prepare_commit_msg:main"
