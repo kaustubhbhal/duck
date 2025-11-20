@@ -2,3 +2,4 @@ test change
 Test change for interactive duck
 Final test
 Testing stderr prompts
+Final test with /dev/tty
