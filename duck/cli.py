@@ -63,29 +63,35 @@ def parse_questions(questions_text: str) -> list[str]:
 
 def collect_answers(questions: list[str]) -> dict[str, str]:
     """Prompt the user to answer each question."""
+    import sys
     answers = {}
-    print("\n" + "="*60, flush=True)
-    print("📝 PLEASE ANSWER THE FOLLOWING QUESTIONS", flush=True)
-    print("="*60 + "\n", flush=True)
-    print("(Type your answer and press Enter. Press Ctrl+C to skip)\n", flush=True)
+    
+    # Debug: Write to stderr which isn't buffered
+    sys.stderr.write("\n" + "="*60 + "\n")
+    sys.stderr.write("📝 PLEASE ANSWER THE FOLLOWING QUESTIONS\n")
+    sys.stderr.write("="*60 + "\n\n")
+    sys.stderr.write("(Type your answer and press Enter. Press Ctrl+C to skip)\n\n")
+    sys.stderr.flush()
     
     # Open /dev/tty to read from the terminal even in a hook
     try:
         with open('/dev/tty', 'r') as tty:
             for i, question in enumerate(questions, 1):
-                print(f"\n[Question {i}/{len(questions)}]", flush=True)
-                print(f"Q: {question}", flush=True)
-                print("A: ", end='', flush=True)
-                sys.stdout.flush()  # Extra flush
+                sys.stderr.write(f"\n[Question {i}/{len(questions)}]\n")
+                sys.stderr.write(f"Q: {question}\n")
+                sys.stderr.write("A: ")
+                sys.stderr.flush()
+                
                 answer = tty.readline().strip()
                 if answer:
                     answers[question] = answer
                 else:
                     answers[question] = "(no answer provided)"
         
-        print("\n" + "="*60, flush=True)
-        print(f"✅ Collected {len(answers)} answers!", flush=True)
-        print("="*60 + "\n", flush=True)
+        sys.stderr.write("\n" + "="*60 + "\n")
+        sys.stderr.write(f"✅ Collected {len(answers)} answers!\n")
+        sys.stderr.write("="*60 + "\n\n")
+        sys.stderr.flush()
                     
     except KeyboardInterrupt:
         print("\n\n⚠️  Q&A cancelled by user. Continuing without answers.")
