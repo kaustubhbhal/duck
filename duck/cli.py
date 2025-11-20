@@ -66,10 +66,18 @@ def collect_answers(questions: list[str]) -> dict[str, str]:
     answers = {}
     print("\n📝 Please answer the following questions:\n")
     
-    for i, question in enumerate(questions, 1):
-        print(f"\nQ{i}: {question}")
-        answer = input("A: ").strip()
-        answers[question] = answer
+    # Open /dev/tty to read from the terminal even in a hook
+    try:
+        with open('/dev/tty', 'r') as tty:
+            for i, question in enumerate(questions, 1):
+                print(f"\nQ{i}: {question}")
+                print("A: ", end='', flush=True)
+                answer = tty.readline().strip()
+                answers[question] = answer
+    except Exception as e:
+        print(f"Error reading input: {e}")
+        print("Skipping Q&A collection.")
+        return {}
     
     return answers
 

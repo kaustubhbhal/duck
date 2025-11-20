@@ -3,6 +3,6 @@ repos:
     rev: v1.0.0-alpha
     hooks:
       - id: generate-why-questions
-        stages: [commit]
+        stages: [pre-commit]
       - id: append-why-answers
         stages: [prepare-commit-msg]

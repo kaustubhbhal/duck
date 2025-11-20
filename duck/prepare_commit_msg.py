@@ -8,6 +8,10 @@ import tempfile
 
 
 def main():
+    if len(sys.argv) < 2:
+        # Not being called as a git hook, skip
+        return 0
+        
     commit_msg_file = sys.argv[1]
     
     # Check if we have saved answers from duck

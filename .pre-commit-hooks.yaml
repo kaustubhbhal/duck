@@ -10,6 +10,6 @@
   name: Append Why Answers to Commit Message
   entry: duck-prepare-commit-msg
   language: python
-  pass_filenames: false
+  pass_filenames: true
   always_run: true
   stages: [prepare-commit-msg]
