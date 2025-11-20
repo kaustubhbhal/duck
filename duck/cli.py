@@ -66,32 +66,31 @@ def collect_answers(questions: list[str]) -> dict[str, str]:
     import sys
     answers = {}
     
-    # Debug: Write to stderr which isn't buffered
-    sys.stderr.write("\n" + "="*60 + "\n")
-    sys.stderr.write("📝 PLEASE ANSWER THE FOLLOWING QUESTIONS\n")
-    sys.stderr.write("="*60 + "\n\n")
-    sys.stderr.write("(Type your answer and press Enter. Press Ctrl+C to skip)\n\n")
-    sys.stderr.flush()
-    
-    # Open /dev/tty to read from the terminal even in a hook
+    # Open /dev/tty for both reading AND writing to bypass pre-commit's stdio capture
     try:
-        with open('/dev/tty', 'r') as tty:
+        with open('/dev/tty', 'r+') as tty:
+            tty.write("\n" + "="*60 + "\n")
+            tty.write("📝 PLEASE ANSWER THE FOLLOWING QUESTIONS\n")
+            tty.write("="*60 + "\n\n")
+            tty.write("(Type your answer and press Enter. Press Ctrl+C to skip)\n\n")
+            tty.flush()
+            
             for i, question in enumerate(questions, 1):
-                sys.stderr.write(f"\n[Question {i}/{len(questions)}]\n")
-                sys.stderr.write(f"Q: {question}\n")
-                sys.stderr.write("A: ")
-                sys.stderr.flush()
+                tty.write(f"\n[Question {i}/{len(questions)}]\n")
+                tty.write(f"Q: {question}\n")
+                tty.write("A: ")
+                tty.flush()
                 
                 answer = tty.readline().strip()
                 if answer:
                     answers[question] = answer
                 else:
                     answers[question] = "(no answer provided)"
-        
-        sys.stderr.write("\n" + "="*60 + "\n")
-        sys.stderr.write(f"✅ Collected {len(answers)} answers!\n")
-        sys.stderr.write("="*60 + "\n\n")
-        sys.stderr.flush()
+            
+            tty.write("\n" + "="*60 + "\n")
+            tty.write(f"✅ Collected {len(answers)} answers!\n")
+            tty.write("="*60 + "\n\n")
+            tty.flush()
                     
     except KeyboardInterrupt:
         print("\n\n⚠️  Q&A cancelled by user. Continuing without answers.")
