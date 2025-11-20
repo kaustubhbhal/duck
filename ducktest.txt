@@ -3,3 +3,4 @@ Test change for interactive duck
 Final test
 Testing stderr prompts
 Final test with /dev/tty
+# Testing duck Q&A feature
