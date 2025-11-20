@@ -1,1 +1,0 @@
-# Testing duck AI questions
